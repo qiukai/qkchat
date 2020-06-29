@@ -1,0 +1,110 @@
+//package db
+//
+//import (
+//	"database/sql"
+//	"fmt"
+//	_ "github.com/go-sql-driver/mysql"
+//	"log"
+//)
+//
+//var db *sql.DB
+//var dbMap map[string]string
+//
+//func init() {
+//
+//	dbMap = make(map[string]string)
+//
+//	dbMap["boss"] = "boss:boss@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/boss?&charset=utf8&loc=Local"
+//	dbMap["user"] = "user:user@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/user?charset=utf8"
+//	dbMap["notifier"] = "notifier:notifier@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/notifier?charset=utf8"
+//	dbMap["lmquery"] = "lmquery:lmquery@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/whtax2?charset=utf8"
+//	dbMap["whtax"] = "whtax:whtax@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/whtax?charset=utf8"
+//	dbMap["freedom"] = "freedom:freedom@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/freedom?charset=utf8"
+//	dbMap["psalary_di"] = "psalary_di:psalary_di@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/psalary_di?charset=utf8&useSSL=false"
+//	dbMap["archive"] = "archive:archive@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/archive?charset=utf8"
+//	dbMap["contract"] = "contract:contract@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/contract?charset=utf8"
+//	dbMap["ops"] = "ops:ops@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/ops?&charset=utf8&loc=Local"
+//	dbMap["whtax_account"] = "whtax_account:whtax_account@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/whtax_account?charset=utf8"
+//	dbMap["standard_account"] = "standard_account:standard_account@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/standard_account?useUnicode=true"
+//	dbMap["merchant"] = "merchant:merchant@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/merchant?charset=utf8"
+//	dbMap["oladingagent"] = "oladingagent:oladingagent@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/oladingagent?&charset=utf8&loc=Local"
+//	dbMap["olading_basic"] = "olading_basic:olading_basic@(jdbc:mysql://rm-2zeqx3z15wxbz3rol.mysql.rds).aliyuncs.com/olading_basic?&charset=utf8&loc=Local"
+//	dbMap["authz"] = "authz:authz@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/authz?&charset=utf8&loc=Local"
+//	dbMap["agent"] = "agent:agent@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/agent?charset=utf8"
+//	dbMap["signing"] = "signing:signing@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/signing?&charset=utf8&loc=Local"
+//	dbMap["standard_trans"] = "standard_trans:standard_trans@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/standard_trans?charset=utf8"
+//	dbMap["account"] = "account:account@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/account?charset=utf8"
+//	dbMap["whtax2"] = "whtax2:whtax2@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/whtax2?charset=utf8"
+//	dbMap["levy"] = "levy:levy@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/levy?&charset=utf8&loc=Local"
+//	dbMap["gateway"] = "gateway:gateway@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/gateway?charset=utf8"
+//	dbMap["xst_salary"] = "xst_salary:xst_salary@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/xst_salary?charset=utf8"
+//	dbMap["sequence"] = "sequence:sequence@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/sequence?charset=utf8"
+//	dbMap["local"] = "root:@(localhost:3306)/qk?charset=utf8&parseTime=True&loc=Local"
+//	dbMap["whtax2-38"] = "whtax2:123456@(172.19.60.38)/whtax2?charset=utf8"
+//
+//	dbMap["psalary"] = "psalary:20191206!@#@(rm-2zeqx3z15wxbz3rol.mysql.rds.aliyuncs.com)/psalary?charset=utf8"
+//
+//}
+//
+//func CreateDb(userName string) {
+//	var err error
+//	host := dbMap[userName]
+//	db, err = sql.Open("mysql", host)
+//	if err != nil {
+//		log.Fatal(err)
+//	}
+//	log.Print("创建数据库连接成功")
+//}
+//
+//func Exec(sql string) int64 {
+//	tx, err := db.Begin()
+//	defer db.Close()
+//	if err != nil {
+//
+//		log.Fatal("开启事物失败", err)
+//	}
+//	exec, err := tx.Exec(sql)
+//	if err != nil {
+//		log.Fatal("执行失败", err)
+//		tx.Rollback()
+//	}
+//	tx.Commit()
+//	rowsAffected, _ := exec.RowsAffected()
+//	return rowsAffected
+//}
+//
+//func Query(sqlStr string) {
+//
+//	rows, err := db.Query(sqlStr)
+//	defer rows.Close()
+//	defer db.Close()
+//
+//	if err != nil {
+//		log.Fatal("查询出错", err)
+//	}
+//
+//	//获取列名
+//	columns, _ := rows.Columns()
+//
+//	for i := range columns {
+//		fmt.Print(columns[i], "\t")
+//	}
+//	fmt.Println()
+//
+//	//定义一个切片,长度是字段的个数,切片里面的元素类型是sql.RawBytes
+//	values := make([]sql.RawBytes, len(columns))
+//	//定义一个切片,元素类型是interface{} 接口
+//	scanArgs := make([]interface{}, len(values))
+//	for i := range values {
+//		//把sql.RawBytes类型的地址存进去了
+//		scanArgs[i] = &values[i]
+//	}
+//	//获取字段值
+//	for rows.Next() {
+//		rows.Scan(scanArgs...)
+//		for i := range scanArgs {
+//			fmt.Print(string(values[i]), "\t")
+//		}
+//		fmt.Println()
+//	}
+//}
