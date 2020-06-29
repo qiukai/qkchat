@@ -1,5 +1,7 @@
 package my_error
 
+import "util"
+
 type Error500 struct {
 	ErrCode int
 	ErrMsg  string
@@ -19,4 +21,8 @@ func NewDefaultError500() *Error500 {
 
 func (self *Error500) Error() string {
 	return self.ErrMsg
+}
+
+func (self *Error500) String() string {
+	return string(util.Marshal(self))
 }

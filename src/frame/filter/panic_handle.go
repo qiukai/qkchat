@@ -4,7 +4,6 @@ import (
 	"frame/myLog"
 	"my_error"
 	"net/http"
-	"util"
 )
 
 func panicHanle(response http.ResponseWriter) {
@@ -13,14 +12,12 @@ func panicHanle(response http.ResponseWriter) {
 		_err, ok := err.(error)
 		if ok {
 			error500 := my_error.NewError500(_err)
-			marshal := util.Marshal(error500)
-			myLog.Error(string(marshal))
-			result500(response, marshal)
+			myLog.Error(error500)
+			result500(response, []byte(error500.String()))
 			return
 		}
 		error500 := my_error.NewError500ByMsg("系统无法处理")
-		marshal := util.Marshal(error500)
-		myLog.Error(string(marshal))
-		result500(response, marshal)
+		myLog.Error(error500)
+		result500(response, []byte(error500.String()))
 	}
 }

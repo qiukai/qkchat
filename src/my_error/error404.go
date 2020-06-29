@@ -1,5 +1,7 @@
 package my_error
 
+import "util"
+
 type Error404 struct {
 	ErrCode int
 	ErrMsg  string
@@ -15,4 +17,8 @@ func NewDefaultError404() *Error404 {
 
 func (self *Error404) Error() string {
 	return self.ErrMsg
+}
+
+func (self *Error404) String() string {
+	return string(util.Marshal(self))
 }
