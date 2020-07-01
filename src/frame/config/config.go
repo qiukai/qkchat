@@ -2,15 +2,22 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
+	"log"
+	"my_error"
 	"os"
+	"runtime"
 )
 
 var configMap map[string]string
 
 func GetConfig(key string) string {
-	return configMap[key]
+	s := configMap[key]
+	if "" == s {
+		error500 := my_error.NewError500ByMsg("config.json 中没有 key:" + key)
+		panic(error500)
+	}
+	return s
 }
 
 func init() {
@@ -18,7 +25,8 @@ func init() {
 	dir, _ := os.Getwd()
 	data, err := ioutil.ReadFile(dir + "/config/config.json")
 	if err != nil {
-		fmt.Println("/config/config.json 文件不存在", err)
+		error500 := my_error.NewError500ByMsg("/config/config.json 文件不存在")
+		print(error500)
 		return
 	}
 	configMap = make(map[string]string)
@@ -27,4 +35,11 @@ func init() {
 		panic(err)
 	}
 
+}
+
+func print(v interface{}) {
+	traceId := GetTrace().GetTraceId()
+	pc, _, line, _ := runtime.Caller(2)
+	f := runtime.FuncForPC(pc)
+	log.Print("info", " [", traceId, "] ", f.Name(), ":", line, " ", v)
 }
