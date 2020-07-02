@@ -15,6 +15,15 @@ func panicHanle(response http.ResponseWriter) {
 			result500(response, []byte(error500.String()))
 			return
 		}
+
+		s, ok := err.(string)
+		if ok {
+			error500 := my_error.NewError500ByMsg(s)
+			myLog.Error(error500)
+			result500(response, []byte(error500.String()))
+			return
+		}
+
 		error500 := my_error.NewError500ByMsg("系统无法处理")
 		myLog.Error(error500)
 		result500(response, []byte(error500.String()))

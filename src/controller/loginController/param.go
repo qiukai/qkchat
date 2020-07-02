@@ -4,6 +4,7 @@ import "encoding/json"
 
 type LoginParam struct {
 	Name string `json:"name"`
+	Age  int32  `json:"age"`
 }
 
 func (self *LoginParam) String() string {
