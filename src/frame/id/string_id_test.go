@@ -3,21 +3,20 @@ package id
 import (
 	"fmt"
 	"testing"
+	"time"
 )
 
 func TestNext(t *testing.T) {
 
-	//ipInt := 255 * 255 * 255 * 255
-	//
-	//ipString := int64ToString(int64(ipInt))
-	//
-	//fmt.Print(ipInt, "\n")
-	//fmt.Print(len(ipString), "\n")
-	//fmt.Print(ipString, "\n")
-
-
-	ip := IpInt()
-	fmt.Print(ip)
+	for i := 0; i < 1000; i++ {
+		go next1()
+		time.Sleep(1000000)
+	}
 
 }
 
+func next1() {
+	s := Next()
+	fmt.Println(s)
+
+}

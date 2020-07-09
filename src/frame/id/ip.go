@@ -30,13 +30,32 @@ func Ip() string {
 }
 
 func IpInt() int64 {
+	return IpIntByDigit(4)
+}
 
+func IpIntByDigit(digit uint8) int64 {
 	ip := Ip()
 	ipSplit := strings.Split(ip, ".")
-	val1 := util.String2int64(ipSplit[0])
-	val2 := util.String2int64(ipSplit[1])
-	val3 := util.String2int64(ipSplit[2])
-	val4 := util.String2int64(ipSplit[3])
-	sum := val1*255*255*255 + val2*255*255 + val3*255 + val4
-	return sum
+
+	if digit == 1 {
+		return util.String2int64(ipSplit[3])
+	} else if digit == 2 {
+		val3 := util.String2int64(ipSplit[2])
+		val4 := util.String2int64(ipSplit[3])
+		return val3*255 + val4
+	} else if digit == 3 {
+		val2 := util.String2int64(ipSplit[1])
+		val3 := util.String2int64(ipSplit[2])
+		val4 := util.String2int64(ipSplit[3])
+		return val2*255*255 + val3*255 + val4
+	} else if digit == 4 {
+		val1 := util.String2int64(ipSplit[0])
+		val2 := util.String2int64(ipSplit[1])
+		val3 := util.String2int64(ipSplit[2])
+		val4 := util.String2int64(ipSplit[3])
+		sum := val1*255*255*255 + val2*255*255 + val3*255 + val4
+		return sum
+	} else {
+		return 0
+	}
 }
